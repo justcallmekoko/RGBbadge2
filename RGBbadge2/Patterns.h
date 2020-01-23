@@ -11,13 +11,14 @@
 #define Pixels 16
 
 
-#define NUM_PATTERN 3
+#define NUM_PATTERN 4
 
 // Pattern definitions
 #define FALLING_RAINBOW 0
 //#define PULSE 2
 #define TWINKLE 1
 #define TRACER 2
+#define BATTERY 3
 
 //extern Adafruit_NeoPixel strip;
 
@@ -59,6 +60,7 @@ class Patterns
     void initPattern(uint8_t pattern);
     //void Pulse(int r, int g, int b);
     //void Rainbow1();
+    void displayBatteryLevel();
     void Rainbow2(int ring_speed, int fade_delay, float fadeRate, int wheel_speed);
     void resetWheel();
     void Twinkle(int ring_speed, int fade_delay, float fadeRate, int max_interval);

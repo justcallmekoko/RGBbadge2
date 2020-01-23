@@ -1,6 +1,8 @@
 #include "Patterns.h"
+#include "Battery.h"
 
 extern Adafruit_NeoPixel strip;
+extern Battery batteryObj;
 
 // Adjust values specific for a certain pattern
 void Patterns::initPattern(uint8_t pattern)
@@ -24,6 +26,41 @@ void Patterns::initPattern(uint8_t pattern)
   {
     // (int ring_speed, int fade_delay, float fadeRate, int wheel_speed)
     this->Rainbow2(35, 2, 0.90, 2);
+  }
+  else if (pattern == BATTERY)
+  {
+    this->displayBatteryLevel();
+  }
+}
+
+void Patterns::displayBatteryLevel()
+{
+  this->current_itter++;
+  if (this->current_itter >= IP5306_CHECK_INTERVAL)
+  {
+    int8_t temp_level = batteryObj.getBatteryLevel();
+  
+    if (batteryObj.current_level != temp_level)
+    {
+      batteryObj.current_level = temp_level;
+  
+      float num_pixel = (Pixels * batteryObj.current_level) / 100;
+
+      Serial.print("Updating battery display: ");
+      Serial.print(batteryObj.current_level);
+      Serial.print("% | Pixels: ");
+      Serial.println(num_pixel);
+  
+      for (int i = 0; i < Pixels; i++)
+      {
+        if (i < num_pixel)
+          strip.setPixelColor(i, 255, 255, 255);
+        else
+          strip.setPixelColor(i, 0, 0, 0);
+      }
+      strip.show();
+    }
+    this->current_itter = 0;
   }
 }
 
